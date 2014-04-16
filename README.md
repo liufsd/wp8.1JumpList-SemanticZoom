@@ -19,3 +19,8 @@ Instead of using the LongListSelector we now have SemanticZoom. SemanticZoom is 
 </SemanticZoom>
 http://msdn.microsoft.com/en-us/library/windows/apps/windows.ui.xaml.controls.semanticzoom.aspx
 
+Windows Phone app: zoomed-out and zoomed-in views of a semantic zoom control
+ ![image](http://i.msdn.microsoft.com/dynimg/IC713280.png)
+ 
+ Api:
+ http://msdn.microsoft.com/en-us/library/windows/apps/hh465319.aspx
