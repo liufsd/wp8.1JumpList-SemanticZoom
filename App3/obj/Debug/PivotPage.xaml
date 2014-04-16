@@ -1,0 +1,200 @@
+﻿<Page
+    x:Class="App3.PivotPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:App3"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:App3.Data"
+    xmlns:common="using:App3.Common"
+    xmlns:groupedGridView="using:GroupedGridView"
+    mc:Ignorable="d"
+    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <CommonNavigationTransitionInfo IsStaggeringEnabled="True"/>
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+    <Page.Resources>
+        <CollectionViewSource x:Name="myCVS"
+                              IsSourceGrouped="true" />
+        <CollectionViewSource x:Name="cvs2" IsSourceGrouped="true" />
+        <common:ListGroupStyleSelector x:Key="listGroupStyleSelector"></common:ListGroupStyleSelector>
+    </Page.Resources>
+    <Grid>
+        <Pivot x:Uid="Pivot" Title="MY APPLICATION" x:Name="pivot" CommonNavigationTransitionInfo.IsStaggerElement="True" Margin="0,12,0,0">
+            <!--Pivot item one-->
+            <PivotItem
+                x:Uid="PivotItem"
+                Header="one"
+                CommonNavigationTransitionInfo.IsStaggerElement="True">
+                <!--Double line list with text wrapping-->
+                <ListView x:ConnectionId='1'
+                    IsItemClickEnabled="True"
+                                                         
+                    ItemsSource="{Binding Source={StaticResource myCVS}}"
+                    ContinuumNavigationTransitionInfo.ExitElementContainer="True"
+                    Margin="12,0,0,0">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,0,24">
+                                <TextBlock
+                                    Text="{Binding FirstName}"
+                                    TextWrapping="WrapWholeWords"
+                                    Pivot.SlideInAnimationGroup="1"
+                                    CommonNavigationTransitionInfo.IsStaggerElement="True"
+                                    Style="{ThemeResource ListViewItemTextBlockStyle}"/>
+                                <TextBlock
+                                    Text="{Binding LastName}"
+                                    TextWrapping="WrapWholeWords"
+                                    Pivot.SlideInAnimationGroup="2" 
+                                    CommonNavigationTransitionInfo.IsStaggerElement="True" 
+                                    Style="{ThemeResource ListViewItemContentTextBlockStyle}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                   <ListView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="GroupItem">
+                                <Setter Property="IsTabStop" Value="False"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="GroupItem">
+                                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="*"/>
+                                                    </Grid.RowDefinitions>
+                                                    <ContentControl x:Name="HeaderContent" ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                                HorizontalContentAlignment="Stretch"
+                                                                ContentTransitions="{TemplateBinding ContentTransitions}" ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" 
+                                                                Content="{TemplateBinding Content}" IsTabStop="False" Margin="{TemplateBinding Padding}" TabIndex="0"/>
+                                                    <ItemsControl x:Name="ItemsControl" IsTabStop="False" ItemsSource="{Binding GroupItems}" Grid.Row="1" TabIndex="1" TabNavigation="Once">
+                                                        <ItemsControl.ItemContainerTransitions>
+                                                            <TransitionCollection>
+                                                                <AddDeleteThemeTransition/>
+                                                                <ContentThemeTransition/>
+                                                                <ReorderThemeTransition/>
+                                                                <EntranceThemeTransition IsStaggeringEnabled="False"/>
+                                                            </TransitionCollection>
+                                                        </ItemsControl.ItemContainerTransitions>
+                                                    </ItemsControl>
+                                                </Grid>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel HorizontalAlignment="Stretch"
+                                            x:Name="MyPanel"
+                                            Background="Red">
+                                    <Button Content="{Binding Key}"
+                                            HorizontalAlignment="Stretch" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                    </ListView.GroupStyle>
+
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel></VirtualizingStackPanel>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                </ListView>
+            </PivotItem>
+            <!--Pivot item two-->
+            <PivotItem
+                x:Uid="PivotItem"
+                Header="two"
+                CommonNavigationTransitionInfo.IsStaggerElement="True">
+                    <SemanticZoom x:Name="semanticZoom" Width="1150">
+                        <SemanticZoom.ZoomedOutView>
+                            <ListView 
+                                Background="Aquamarine"
+                                ScrollViewer.IsHorizontalScrollChainingEnabled="False" >
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                Text="{Binding Group.Key}"
+                                FontFamily="Segoe UI" FontWeight="Light"
+                                FontSize="24"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                       
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Margin" Value="4" />
+                                        <Setter Property="Padding" Value="10" />
+                                        <Setter Property="BorderBrush" Value="Gray" />
+                                        <Setter Property="BorderThickness" Value="1" />
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </SemanticZoom.ZoomedOutView>
+                        <SemanticZoom.ZoomedInView>
+                            <ListView x:Name="ItemsGridView" 
+                              ItemsSource="{Binding Source={StaticResource cvs2}}" 
+                                        Margin="12,0,0,0"
+                             >
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="0,0,0,24">
+                                            <TextBlock
+                                    Text="{Binding Title}"
+                                    TextWrapping="WrapWholeWords"
+                                    Pivot.SlideInAnimationGroup="1"
+                                    CommonNavigationTransitionInfo.IsStaggerElement="True"
+                                    Style="{ThemeResource ListViewItemTextBlockStyle}"/>
+                                            <TextBlock
+                                    Text="{Binding Subtitle}"
+                                    TextWrapping="WrapWholeWords"
+                                    Pivot.SlideInAnimationGroup="2" 
+                                    CommonNavigationTransitionInfo.IsStaggerElement="True" 
+                                    Style="{ThemeResource ListViewItemContentTextBlockStyle}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+
+                       
+
+                                <ListView.GroupStyle>
+                                    <GroupStyle>
+                                        <GroupStyle.HeaderTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text='{Binding Key}' Foreground="{StaticResource ApplicationForegroundThemeBrush}" Margin="5" FontSize="36" FontFamily="Segoe UI" FontWeight="Light" />
+                                            </DataTemplate>
+                                        </GroupStyle.HeaderTemplate>
+                                    </GroupStyle>
+                                </ListView.GroupStyle>
+                            </ListView>
+                        </SemanticZoom.ZoomedInView>
+                    </SemanticZoom>
+            </PivotItem>
+        </Pivot>
+    </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton x:ConnectionId='2' x:Uid="AddAppBarButton" x:Name="AddAppBarButton" Label="add" Icon="Add"                               />
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Uid="SecondaryButton1" x:Name="SecondaryButton1" Label="secondary command 1" />
+                <AppBarButton x:Uid="SecondaryButton2" x:Name="SecondaryButton2" Label="secondary command 2" />
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>
+
